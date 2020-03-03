@@ -9,7 +9,9 @@ namespace TheBarista
         CLASSIC
     }
 
-    interface ICupSize
+    // Spy: @Norshiervani, I saw that people used interface, unsure if they
+    // did it like this.
+    public interface ICupSize
     {
         float Volume {get; set;}
         double Price {get; set;}
@@ -20,6 +22,7 @@ namespace TheBarista
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Espresso Group 6!");
+            Console.WriteLine();
             Bean bean = new Bean();
             bean.SetCountry("COL");
             bean.SetStrength(5);
@@ -36,137 +39,9 @@ namespace TheBarista
 
     }
 
-    class Espresso
-    {
-        private Bean bean;
-        private CoffeeSorts coffeeSort;
-        private int amountWater = 0;
-        private ICupSize cup;
+   
 
-        public Bean GetBean() {
-            return this.bean;
-        }
-
-        public CoffeeSorts GetCoffeeSort() {
-            return this.coffeeSort;
-        }
-
-        public int GetAmountWater() {
-            return this.amountWater;
-        }
-
-        public ICupSize GetCupSize()
-        {
-            return this.cup;
-        }
-
-
-        public void AddWater(int amountWater)
-        {
-            this.amountWater += amountWater;
-        }
-        
-        public void SetBean(Bean bean)
-        {
-            this.bean = bean;
-        }
-
-        public void SetCoffeeSort(CoffeeSorts sort)
-        {
-            this.coffeeSort = sort;
-        }
-
-        public void SetCupSize(ICupSize cup)
-        {
-            this.cup = cup;
-        }
-
-    }
-
-    class Bean
-    {
-        private string Country { get; set; }
-        private int Strength { get; set; }
-        private bool Fairtrade { get; set; }
-        private bool Ecologic { get; set; }
-        BeanType beantype {get; set; }
-
-        public string GetCountry() 
-        {
-            return this.Country;
-        }
-
-        public int GetStrength() 
-        {
-            return this.Strength;
-        }
-
-        public bool GetFairtrade() 
-        {
-            return this.Fairtrade;
-        }
-
-        public bool GetEcologic() 
-        {
-            return this.Ecologic;
-        }
-
-        public BeanType GetBeanType() 
-        {
-            return this.beantype;
-        }
-
-        public void SetCountry(string country) 
-        {
-            this.Country = country;
-            Console.WriteLine("Bean is from " + country);
-        }
-
-        public void SetStrength(int strength) 
-        {
-            this.Strength = strength;
-            Console.WriteLine("This bean is " + strength + "/5");
-
-        }
-
-        public void SetFairtrade(bool fairtrade) 
-        {
-            this.Fairtrade = fairtrade;
-            if (fairtrade)
-            {
-                Console.WriteLine("this bean is fairtrade");
-            }
-            else
-            {
-                Console.WriteLine("this bean is not fairtrade");
-            }
-        }
-
-        public void SetEcologic(bool ecologic) 
-        {
-            this.Ecologic = ecologic;
-            if (ecologic)
-            {
-                Console.WriteLine("this bean is ecologic");
-            }
-            else
-            {
-                Console.WriteLine("this bean is not ecologic");
-            }
-        }
-
-        public void SetBeanType(BeanType beanType) 
-        {
-            this.beantype = beanType;
-            Console.WriteLine("beantyp is" + beantype);
-        }
-
-        public enum BeanType
-        {
-            ROBUSTA,
-            ARABICA
-        }
-    }
+    
 
     class SmallCup : ICupSize
     {
