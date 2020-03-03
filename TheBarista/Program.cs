@@ -20,11 +20,17 @@ namespace TheBarista
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Espresso Group 6!");
+            Bean bean = new Bean();
+            bean.SetCountry("COL");
+            bean.SetStrength(5);
+            bean.SetEcologic(false);
+            bean.SetFairtrade(true);
+            bean.SetBeanType(Bean.BeanType.ARABICA);
             Espresso espresso = new Espresso();
             espresso.AddWater(10);
             espresso.SetCoffeeSort(CoffeeSorts.CLASSIC);
-            //espresso.SetBean(new Bean);
-
+            espresso.SetBean(bean);
+            espresso.SetCupSize()
         }
 
     }
@@ -68,10 +74,10 @@ namespace TheBarista
         {
             this.coffeeSort = sort;
         }
+
         public void SetCupSize(ICupSize cup)
         {
-            this.cup=cup;
-
+            this.cup = cup;
         }
 
     }
@@ -82,6 +88,7 @@ namespace TheBarista
         private int Strength { get; set; }
         private bool Fairtrade { get; set; }
         private bool Ecologic { get; set; }
+        BeanType beantype {get; set; }
 
         public string GetCountry() 
         {
@@ -101,6 +108,11 @@ namespace TheBarista
         public bool GetEcologic() 
         {
             return this.Ecologic;
+        }
+
+        public BeanType GetBeanType() 
+        {
+            return this.beantype;
         }
 
         public void SetCountry(string country) 
@@ -123,7 +135,12 @@ namespace TheBarista
             this.Ecologic = ecologic;
         }
 
-        enum BeanTypes 
+        public void SetBeanType(BeanType beanType) 
+        {
+            this.beantype = beanType;
+        }
+
+        public enum BeanType
         {
             ROBUSTA,
             ARABICA
