@@ -14,20 +14,46 @@ namespace TheBarista
 
     class Espresso
     {
+        private Bean bean;
+        private CoffeeSorts coffeeSort;
+        private int amountWater;
 
-        Type espressotype;
-        int Volume = 0;
-
-        enum Type
-        {
-            Regular,
-            Romano
+        public getBean() {
+            return this.bean;
         }
 
-        void Espresso()
-        {
-
+        public getCoffeeSort() {
+            return this.coffeeSort;
         }
+
+        public getAmountWater() {
+            return this.amountWater;
+        }
+
+        public Espresso(CoffeeSorts coffeeSort, int amountWater)
+        {
+            this.coffeeSort = coffeeSort;
+            this.amountWater = amountWater;
+        }
+
+        public void AddWater(int amountWater)
+        {
+            this.amountWater += amountWater;
+        }
+        
+        void AddBean(Bean myBean)
+        {
+            
+        }
+
+    }
+
+    // Spy: @Norshiervani, other people used string arrays to store these
+    // we use enum instead.
+    public enum CoffeeSorts {
+        ROBUSTA,
+        DOPPIO,
+        CLASSIC
     }
 
     class Bean
