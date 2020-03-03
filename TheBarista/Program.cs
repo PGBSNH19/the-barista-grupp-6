@@ -12,8 +12,7 @@ namespace TheBarista
     interface ICup
     {
         float volume;
-        string material;
-        string color;
+        double price;
     }
 
     class Program
@@ -24,7 +23,7 @@ namespace TheBarista
             Espresso espresso = new Espresso();
             espresso.AddWater(10)
             espresso.SetCoffeeSort(CoffeeSorts.CLASSIC);
-            espresso.SetBean(Bean.)
+            //espresso.SetBean(Bean.)
         }
 
     }
@@ -119,7 +118,21 @@ namespace TheBarista
         }
     }
 
-    class Cup : ICup
+    class SmallCup : ICup
+    {
+        const float Volume =  
+        string Material { get; set; }
+        string Color { get; set; }
+    }
+    
+    class MediumCup : ICup
+    {
+        float Volume { get; set; }
+        string Material { get; set; }
+        string Color { get; set; }
+    }
+
+    class LargeCup : ICup
     {
         float Volume { get; set; }
         string Material { get; set; }
