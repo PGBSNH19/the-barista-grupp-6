@@ -12,18 +12,19 @@ namespace TheBarista
 
     }
 
-    class EspressoMachine
-    {
-        float Bar { get; set; }
-    }
-
     class Espresso
     {
 
-        Type
-        Volume
+        Type espressotype;
+        int Volume = 0;
 
         enum Type
+        {
+            Regular,
+            Romano
+        }
+
+        void Espresso()
         {
 
         }
