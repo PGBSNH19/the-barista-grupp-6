@@ -9,10 +9,15 @@ namespace TheBarista
         CLASSIC
     }
 
-    interface ICup
+    abstract class CupSize
     {
-        float volume;
-        double price;
+        private float volume;
+        private double price;
+
+        protected CupSize(float volume, double price) {
+            this.volume = volume;
+            this.price = price;
+        }
     }
 
     class Program
@@ -21,9 +26,10 @@ namespace TheBarista
         {
             Console.WriteLine("Welcome to Espresso Group 6!");
             Espresso espresso = new Espresso();
-            espresso.AddWater(10)
+            espresso.AddWater(10);
             espresso.SetCoffeeSort(CoffeeSorts.CLASSIC);
-            //espresso.SetBean(Bean.)
+            //espresso.SetBean(new Bean);
+
         }
 
     }
@@ -33,17 +39,23 @@ namespace TheBarista
         private Bean bean;
         private CoffeeSorts coffeeSort;
         private int amountWater = 0;
+        private CupSize cup;
 
-        public getBean() {
+        public Bean GetBean() {
             return this.bean;
         }
 
-        public getCoffeeSort() {
+        public CoffeeSorts GetCoffeeSort() {
             return this.coffeeSort;
         }
 
-        public getAmountWater() {
+        public int GetAmountWater() {
             return this.amountWater;
+        }
+
+        public CupSize GetCupSize()
+        {
+            return this.cup;
         }
 
 
@@ -60,6 +72,11 @@ namespace TheBarista
         public void SetCoffeeSort(CoffeeSorts sort)
         {
             this.coffeeSort = sort;
+        }
+        public void SetCupSize(CupSize cup)
+        {
+            this.cup=cup;
+
         }
 
     }
@@ -118,24 +135,24 @@ namespace TheBarista
         }
     }
 
-    class SmallCup : ICup
+    class SmallCup : CupSize
     {
-        const float Volume =  
-        string Material { get; set; }
-        string Color { get; set; }
+        public SmallCup() {
+            super(8, 25);
+        }
     }
     
-    class MediumCup : ICup
+    class MediumCup : CupSize
     {
-        float Volume { get; set; }
-        string Material { get; set; }
-        string Color { get; set; }
+        public MediumCup() {
+            super(12, 30);
+        }
     }
 
-    class LargeCup : ICup
+    class LargeCup : CupSize
     {
-        float Volume { get; set; }
-        string Material { get; set; }
-        string Color { get; set; }
+        public LargeCup() {
+            super(16, 35);
+        }
     }
 }
