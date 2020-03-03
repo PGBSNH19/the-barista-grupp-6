@@ -16,7 +16,7 @@ namespace TheBarista
     {
         private Bean bean;
         private CoffeeSorts coffeeSort;
-        private int amountWater;
+        private int amountWater = 0;
 
         public getBean() {
             return this.bean;
