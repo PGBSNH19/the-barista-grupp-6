@@ -9,15 +9,10 @@ namespace TheBarista
         CLASSIC
     }
 
-    abstract class CupSize
+    interface ICupSize
     {
-        private float volume;
-        private double price;
-
-        protected CupSize(float volume, double price) {
-            this.volume = volume;
-            this.price = price;
-        }
+        float Volume {get; set;}
+        double Price {get; set;}
     }
 
     class Program
@@ -39,7 +34,7 @@ namespace TheBarista
         private Bean bean;
         private CoffeeSorts coffeeSort;
         private int amountWater = 0;
-        private CupSize cup;
+        private ICupSize cup;
 
         public Bean GetBean() {
             return this.bean;
@@ -53,7 +48,7 @@ namespace TheBarista
             return this.amountWater;
         }
 
-        public CupSize GetCupSize()
+        public ICupSize GetCupSize()
         {
             return this.cup;
         }
@@ -73,7 +68,7 @@ namespace TheBarista
         {
             this.coffeeSort = sort;
         }
-        public void SetCupSize(CupSize cup)
+        public void SetCupSize(ICupSize cup)
         {
             this.cup=cup;
 
@@ -135,24 +130,21 @@ namespace TheBarista
         }
     }
 
-    class SmallCup : CupSize
+    class SmallCup : ICupSize
     {
-        public SmallCup() {
-            super(8, 25);
-        }
+        public float Volume {get; set;} = 8;
+        public double Price {get; set;} = 25;
     }
     
-    class MediumCup : CupSize
+    class MediumCup : ICupSize
     {
-        public MediumCup() {
-            super(12, 30);
-        }
+        public float Volume {get; set;} = 12;
+        public double Price {get; set;} = 30;
     }
 
-    class LargeCup : CupSize
+    class LargeCup : ICupSize
     {
-        public LargeCup() {
-            super(16, 35);
-        }
+        public float Volume {get; set;} = 16;
+        public double Price {get; set;} = 35;
     }
 }
