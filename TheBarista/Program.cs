@@ -2,13 +2,30 @@
 
 namespace TheBarista
 {
+    // Spy: @Norshiervani, other people used string arrays to store these
+    // we use enum instead.
+    public enum CoffeeSorts {
+        RISTRETTO,
+        CLASSIC
+    }
+
+    interface ICup
+    {
+        float volume;
+        string material;
+        string color;
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Welcome to Espresso Group 6!");
+            Espresso espresso = new Espresso();
+            espresso.AddWater(10)
+            espresso.SetCoffeeSort(CoffeeSorts.CLASSIC);
+            espresso.SetBean(Bean.)
         }
-
 
     }
 
@@ -30,41 +47,79 @@ namespace TheBarista
             return this.amountWater;
         }
 
-        public Espresso(CoffeeSorts coffeeSort, int amountWater)
-        {
-            this.coffeeSort = coffeeSort;
-            this.amountWater = amountWater;
-        }
 
         public void AddWater(int amountWater)
         {
             this.amountWater += amountWater;
         }
         
-        void AddBean(Bean myBean)
+        public void SetBean(Bean bean)
         {
-            
+            this.bean = bean;
+        }
+
+        public void SetCoffeeSort(CoffeeSorts sort)
+        {
+            this.coffeeSort = sort;
         }
 
     }
 
-    // Spy: @Norshiervani, other people used string arrays to store these
-    // we use enum instead.
-    public enum CoffeeSorts {
-        ROBUSTA,
-        DOPPIO,
-        CLASSIC
-    }
-
     class Bean
     {
-        string Country { get; set; }
-        int Strength { get; set; }
-        bool Fairtrade { get; set; }
-        bool Ecologic { get; set; }
+        private string Country { get; set; }
+        private int Strength { get; set; }
+        private bool Fairtrade { get; set; }
+        private bool Ecologic { get; set; }
+
+        public string GetCountry() 
+        {
+            return this.Country;
+        }
+
+        public int GetStrength() 
+        {
+            return this.Strength;
+        }
+
+        public bool GetFairtrade() 
+        {
+            return this.Fairtrade;
+        }
+
+        public bool GetEcologic() 
+        {
+            return this.Ecologic;
+        }
+
+        public void SetCountry(string country) 
+        {
+            this.Country = country;
+        }
+
+        public void SetStrength(int strength) 
+        {
+            this.Strength = strength;
+        }
+
+        public void SetFairtrade(bool fairtrade) 
+        {
+            this.Fairtrade = fairtrade;
+        }
+
+        public void SetEcologic(bool ecologic) 
+        {
+            this.Ecologic = ecologic;
+        }
+
+        enum BeanTypes 
+        {
+            ROBUSTA,
+            ARABICA
+        }
     }
 
-    class Cup
+    class Cup : ICup
     {
         float Volume { get; set; }
         string Material { get; set; }
