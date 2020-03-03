@@ -30,7 +30,8 @@ namespace TheBarista
             espresso.AddWater(10);
             espresso.SetCoffeeSort(CoffeeSorts.CLASSIC);
             espresso.SetBean(bean);
-            espresso.SetCupSize()
+            espresso.SetCupSize(new MediumCup());
+            
         }
 
     }
@@ -118,26 +119,46 @@ namespace TheBarista
         public void SetCountry(string country) 
         {
             this.Country = country;
+            Console.WriteLine("Bean is from " + country);
         }
 
         public void SetStrength(int strength) 
         {
             this.Strength = strength;
+            Console.WriteLine("This bean is " + strength + "/5");
+
         }
 
         public void SetFairtrade(bool fairtrade) 
         {
             this.Fairtrade = fairtrade;
+            if (fairtrade)
+            {
+                Console.WriteLine("this bean is fairtrade");
+            }
+            else
+            {
+                Console.WriteLine("this bean is not fairtrade");
+            }
         }
 
         public void SetEcologic(bool ecologic) 
         {
             this.Ecologic = ecologic;
+            if (ecologic)
+            {
+                Console.WriteLine("this bean is ecologic");
+            }
+            else
+            {
+                Console.WriteLine("this bean is not ecologic");
+            }
         }
 
         public void SetBeanType(BeanType beanType) 
         {
             this.beantype = beanType;
+            Console.WriteLine("beantyp is" + beantype);
         }
 
         public enum BeanType
