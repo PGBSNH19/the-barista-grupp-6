@@ -40,14 +40,26 @@ namespace TheBarista
         {
             Console.WriteLine("Welcome to Espresso Group 6!");
             Console.WriteLine();
+
+            //Should match Cappucino
             IFinishedDrink drink = new FluentEspresso()
                 .AddBeans(CoffeeSort.Robusta, 4)
+                .AddIngredient(Ingredient.MilkFoam)
                 .AddIngredient(Ingredient.Espresso)
                 .AddIngredient(Ingredient.Milk)
-                .AddIngredient(Ingredient.ChocolateSyrup)
+                .ToBrew();
+
+            //Shouldn't match any (Unknown drink)
+            IFinishedDrink drink2 = new FluentEspresso()
+                .AddBeans(CoffeeSort.Robusta, 4)
+                .AddIngredient(Ingredient.MilkFoam)
+                .AddIngredient(Ingredient.Espresso)
+                .AddIngredient(Ingredient.Milk)
+                .AddIngredient(Ingredient.Water)
                 .ToBrew();
 
             Console.WriteLine(drink);
+            Console.WriteLine(drink2);
         }
     }
 
@@ -77,23 +89,10 @@ namespace TheBarista
             IFinishedDrink[] finishedDrinks = new IFinishedDrink[] {
                 new Latte(), new Americano(), new Cappuccino(), new Macchiato(), new Mocha(), new Espresso()
             };
-            Dictionary<IFinishedDrink, int> rankList = new Dictionary<IFinishedDrink, int>();
 
-            //Ersätt med LINQ - Nor
-            finishedDrinks.ToList().ForEach(d => {
-                int points = 0;
-                d.GetIngredients.ForEach(i =>
-                {
-                     if (this.Ingredients.Contains(i))
-                         points++;
-                     else
-                         points--;
-                });
-                rankList.Add(d, points);
-            });
+            IFinishedDrink finishedDrink = finishedDrinks.FirstOrDefault(f => Enumerable.SequenceEqual(f.GetIngredients.OrderBy(i => i), this.Ingredients.OrderBy(i => i)));
 
-
-            return rankList.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+            return finishedDrink == null ? new UnknownDrink() : finishedDrink;
         }
     }
 
