@@ -47,6 +47,7 @@ namespace TheBarista
                 .AddBeans(CoffeeSort.Robusta, 4)
                 .AddIngredient(Ingredient.Espresso)
                 .AddIngredient(Ingredient.Milk)
+                .AddIngredient(Ingredient.MilkFoam)
                 .ToBrew();
 
             //Shouldn't match any (Unknown drink)
