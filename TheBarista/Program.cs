@@ -7,6 +7,7 @@ namespace TheBarista
     public interface IFinishedDrink
     {
         List<Ingredient> GetIngredients { get; }
+        string GetName();
     }
 
     public interface IBeverage
@@ -44,7 +45,6 @@ namespace TheBarista
             //Should match Cappucino
             IFinishedDrink drink = new FluentEspresso()
                 .AddBeans(CoffeeSort.Robusta, 4)
-                .AddIngredient(Ingredient.MilkFoam)
                 .AddIngredient(Ingredient.Espresso)
                 .AddIngredient(Ingredient.Milk)
                 .ToBrew();
@@ -58,15 +58,13 @@ namespace TheBarista
                 .AddIngredient(Ingredient.Water)
                 .ToBrew();
 
-            Console.WriteLine(drink);
-            Console.WriteLine(drink2);
+            Console.WriteLine(drink.GetName());
+            Console.WriteLine(drink2.GetName());
         }
     }
 
     public class FluentEspresso : IBeverage
     {
-        //private Drink obj = new Drink();
-
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public Beans Beans { get; set; }
 
@@ -98,15 +96,30 @@ namespace TheBarista
 
     public class Latte : IFinishedDrink 
     {
+        private string _name = "Latte";
+
+        public string GetName()
+        {
+            return _name;
+        }
+
         public List<Ingredient> GetIngredients => new List<Ingredient> 
         { 
             Ingredient.Espresso, 
             Ingredient.Milk 
         };
+
     }
 
     public class Espresso : IFinishedDrink
     {
+        private string _name = "Espresso";
+
+        public string GetName()
+        {
+            return _name;
+        }
+
         public List<Ingredient> GetIngredients => new List<Ingredient> 
         { 
             Ingredient.Espresso 
@@ -115,6 +128,13 @@ namespace TheBarista
 
     public class Cappuccino : IFinishedDrink
     {
+        private string _name = "Cappuccino";
+
+        public string GetName()
+        {
+            return _name;
+        }
+
         public List<Ingredient> GetIngredients => new List<Ingredient> 
         { 
             Ingredient.Milk, 
@@ -125,6 +145,13 @@ namespace TheBarista
 
     public class Americano : IFinishedDrink
     {
+        private string _name = "Americano";
+
+        public string GetName()
+        {
+            return _name;
+        }
+
         public List<Ingredient> GetIngredients => new List<Ingredient> 
         { 
             Ingredient.Espresso, 
@@ -134,6 +161,13 @@ namespace TheBarista
 
     public class Macchiato : IFinishedDrink
     {
+        private string _name = "Macchiato";
+
+        public string GetName()
+        {
+            return _name;
+        }
+
         public List<Ingredient> GetIngredients => new List<Ingredient> 
         { 
             Ingredient.Espresso, 
@@ -143,6 +177,13 @@ namespace TheBarista
 
     public class Mocha : IFinishedDrink
     {
+        private string _name = "Mocha";
+
+        public string GetName()
+        {
+            return _name;
+        }
+
         public List<Ingredient> GetIngredients => new List<Ingredient> 
         {
             Ingredient.Espresso, 
@@ -151,21 +192,26 @@ namespace TheBarista
         };
     }
 
-    public class UnknownDrink : IFinishedDrink {
+    public class UnknownDrink : IFinishedDrink
+    {
+        private string _name = "Unknown Drink";
+
+        public string GetName()
+        {
+            return _name;
+        }
+
         public List<Ingredient> GetIngredients => new List<Ingredient> { };
     }
 
     public class Beans
     {
-        CoffeeSort sort;
+        private CoffeeSort sort;
         private int _amountInGrams;
         public int AmountInGrams
         {
-            get { return _amountInGrams; }
-            set
-            {
-                _amountInGrams = value;
-            }
+            get => _amountInGrams;
+            set => _amountInGrams = value;
         }
 
         public Beans(CoffeeSort sort, int amountInGrams)
@@ -175,13 +221,15 @@ namespace TheBarista
         }
     }
 
+    // Note @pierre-nygard
+    // Not implemented
     public class Additive
     {
         private string _name;
 
         public string Name
         {
-            get => _name;
+            get => throw new NotImplementedException();
             set => _name = value;
         }
     }
