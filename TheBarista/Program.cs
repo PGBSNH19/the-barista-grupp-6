@@ -13,8 +13,9 @@ namespace TheBarista
         List<Ingredient> Ingredients { get; set; }
         Beans Beans { get; set; }
 
-        IBeverage AddBeans(CoffeeSort sort, int amount) { return this; }
-        IBeverage AddIngredient(Ingredient ingredient) { return this;  }
+        IBeverage AddBeans(CoffeeSort sort, int amount);
+        IBeverage AddIngredient(Ingredient ingredient);
+        IFinishedDrink ToBrew();
     }
 
     public enum CoffeeSort
@@ -38,7 +39,7 @@ namespace TheBarista
         {
             Console.WriteLine("Welcome to Espresso Group 6!");
             Console.WriteLine();
-            IBeverage espresso = new FluentEspresso()
+            IFinishedDrink espresso = new FluentEspresso()
                 .AddBeans(CoffeeSort.Robusta, 4)
                 .ToBrew();
             Console.ReadLine();
@@ -47,22 +48,24 @@ namespace TheBarista
 
     public class FluentEspresso : IBeverage
     {
-        private Drink obj = new Drink();
+        //private Drink obj = new Drink();
 
         public List<Ingredient> Ingredients { get; set; }
         public Beans Beans { get; set; }
 
         public IBeverage AddBeans(CoffeeSort sort, int grams)
         {
-            obj.Beans = new Beans(sort, grams);
+            Beans = new Beans(sort, grams);
             return this;
         }
 
         public IBeverage AddIngredient(Ingredient ingredient)
         {
-            obj.Ingredients.Add(ingredient);
+            Ingredients.Add(ingredient);
             return this;
         }
+
+        //function(Func<obj, bool> someName)
 
         public IFinishedDrink ToBrew()
         {
@@ -87,26 +90,27 @@ namespace TheBarista
                 }
                 rankList.Add(drink, points);
             }
-
-            return new UnknownDrink();
+            return new Latte();
+            //return this;
         }
     }
 
-    public class Drink : IBeverage
-    {
-        public List<Ingredient> Ingredients { get; set; }
-        public Beans Beans { get; set; }
+    //public class Drink : IBeverage
+    //{
+    //    public List<Ingredient> Ingredients { get; set; }
+    //    public Beans Beans { get; set; }
         
-        public Drink()
-        {
-            this.Ingredients = new List<Ingredient>();
-        }
-    }
+    //    public Drink()
+    //    {
+    //        this.Ingredients = new List<Ingredient>();
+    //    }
+    //}
 
     public class Latte : IFinishedDrink 
     {
         public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.Milk };
     }
+
     public class Espresso : IFinishedDrink
     {
         public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso };
