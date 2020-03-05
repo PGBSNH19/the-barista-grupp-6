@@ -1,20 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TheBarista
 {
-    // Spy: @Norshiervani, other people used string arrays to store these
-    // we use enum instead.
-    public enum CoffeeSorts {
-        RISTRETTO,
-        CLASSIC
+    public interface IFinishedDrink
+    {
+
     }
 
-    // Spy: @Norshiervani, I saw that people used interface, unsure if they
-    // did it like this.
-    public interface ICupSize
+    public interface IBeverage
     {
-        float Volume {get; set;}
-        double Price {get; set;}
+        List<Ingredient> Ingredients { get; set; }
+        Beans Beans { get; set; }
+
+        IBeverage AddBeans(CoffeeSort sort, int amount) { return this; }
+        IBeverage AddIngredient(Ingredient ingredient) { return this;  }
+        IBeverage ToBrew() { return this; }
+    }
+
+    public enum CoffeeSort
+    {
+        Robusta,
+        Colombia
+    }
+
+    public enum Ingredient
+    {
+        Milk,
+        MilkFoam,
+        ChocolateSyrup,
+        Water
     }
 
     class Program
@@ -23,41 +38,106 @@ namespace TheBarista
         {
             Console.WriteLine("Welcome to Espresso Group 6!");
             Console.WriteLine();
-            Bean bean = new Bean();
-            bean.SetCountry("COL");
-            bean.SetStrength(5);
-            bean.SetEcologic(false);
-            bean.SetFairtrade(true);
-            bean.SetBeanType(Bean.BeanType.ARABICA);
-            Espresso espresso = new Espresso();
-            espresso.AddWater(10);
-            espresso.SetCoffeeSort(CoffeeSorts.CLASSIC);
-            espresso.SetBean(bean);
-            espresso.SetCupSize(new MediumCup());
-            
+            IBeverage espresso = new FluentEspresso()
+                .AddBeans(CoffeeSort.Robusta, 4)
+                .ToBrew();
+        }
+    }
+
+    public class FluentEspresso : IBeverage
+    {
+        private Drink obj = new Drink();
+
+        public List<Ingredient> Ingredients { get; set; }
+        public Beans Beans { get; set; }
+
+        public IBeverage AddBeans(CoffeeSort sort, int grams)
+        {
+            obj.Beans = new Beans(sort, grams);
+            return this;
         }
 
+        public IBeverage AddIngredient(Ingredient ingredient)
+        {
+            obj.Ingredients.Add(ingredient);
+            return this;
+        }
+
+        public IFinishedDrink ToBrew()
+        {
+            // Fortsätt
+            
+            return new UnknownDrink();
+        }
     }
 
-   
-
-    
-
-    class SmallCup : ICupSize
+    public class Drink : IBeverage
     {
-        public float Volume {get; set;} = 8;
-        public double Price {get; set;} = 25;
-    }
-    
-    class MediumCup : ICupSize
-    {
-        public float Volume {get; set;} = 12;
-        public double Price {get; set;} = 30;
+        public List<Ingredient> Ingredients { get; set; }
+        public Beans Beans { get; set; }
+        
+        public Drink()
+        {
+            this.Ingredients = new List<Ingredient>();
+        }
     }
 
-    class LargeCup : ICupSize
+    public class Latte : IFinishedDrink 
     {
-        public float Volume {get; set;} = 16;
-        public double Price {get; set;} = 35;
+        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.Milk };
     }
+
+    public class Cappuccino : IFinishedDrink
+    {
+        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.Milk, Ingredient.MilkFoam };
+    }
+
+    public class Americano : IFinishedDrink
+    {
+        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.Water };
+    }
+
+    public class Macchiato : IFinishedDrink
+    {
+        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.MilkFoam };
+    }
+
+    public class Mocha : IFinishedDrink
+    {
+        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.ChocolateSyrup, Ingredient.Milk };
+    }
+
+    public class UnknownDrink : IFinishedDrink { }
+
+    public class Beans
+    {
+        CoffeeSort sort;
+        private int _amountInGrams;
+        public int AmountInGrams
+        {
+            get { return _amountInGrams; }
+            set
+            {
+                _amountInGrams = value;
+            }
+        }
+
+        public Beans(CoffeeSort sort, int amountInGrams)
+        {
+            this.sort = sort;
+            this.AmountInGrams = amountInGrams;
+        }
+    }
+
+    public class Additive
+    {
+        private string _name;
+
+        public string Name
+        {
+            get => _name;
+            set => _name = value;
+        }
+    }
+
 }
