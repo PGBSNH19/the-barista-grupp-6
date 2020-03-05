@@ -15,7 +15,6 @@ namespace TheBarista
 
         IBeverage AddBeans(CoffeeSort sort, int amount) { return this; }
         IBeverage AddIngredient(Ingredient ingredient) { return this;  }
-        IBeverage ToBrew() { return this; }
     }
 
     public enum CoffeeSort
@@ -42,6 +41,7 @@ namespace TheBarista
             IBeverage espresso = new FluentEspresso()
                 .AddBeans(CoffeeSort.Robusta, 4)
                 .ToBrew();
+            Console.ReadLine();
         }
     }
 
@@ -66,36 +66,27 @@ namespace TheBarista
 
         public IFinishedDrink ToBrew()
         {
-            List<IFinishedDrink> finishedDrinkTypes = new List<IFinishedDrink>
-            {
-                new Latte(),
-                new Americano(),
-                new Cappuccino(),
-                new Macchiato(),
-                new Mocha()
-
-            };
-
-            
             IFinishedDrink[] finishedDrinks = new IFinishedDrink[] { 
                 new Latte(), new Americano(), new Cappuccino(), new Macchiato(), new Mocha()
             };
             Dictionary<IFinishedDrink, int> rankList = new Dictionary<IFinishedDrink, int>();
 
             //Ersätt med LINQ - Nor
-            foreach(IFinishedDrink finishedDrinkType in finishedDrinkTypes)
+            foreach(IFinishedDrink drink in finishedDrinks)
             {
-                foreach(Ingredient ingredient in finishedDrinkType.GetIngredients) 
+                int points = 0;
+                foreach(Ingredient ingredient in drink.GetIngredients) 
                 {
                     foreach (Ingredient _ingredient in this.Ingredients)
                     {
-
+                        if (_ingredient == ingredient)
+                        {
+                            points++;
+                        }
                     }
                 }
-                
+                rankList.Add(drink, points);
             }
-
-
 
             return new UnknownDrink();
         }
