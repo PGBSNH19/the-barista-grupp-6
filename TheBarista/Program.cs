@@ -5,7 +5,7 @@ namespace TheBarista
 {
     public interface IFinishedDrink
     {
-
+        Ingredient[] GetIngredients { get; }
     }
 
     public interface IBeverage
@@ -66,7 +66,7 @@ namespace TheBarista
 
         public IFinishedDrink ToBrew()
         {
-            List<IFinishedDrink> drinkTypes = new List<IFinishedDrink>
+            List<IFinishedDrink> finishedDrinkTypes = new List<IFinishedDrink>
             {
                 new Latte(),
                 new Americano(),
@@ -75,7 +75,27 @@ namespace TheBarista
                 new Mocha()
 
             };
+
             
+            IFinishedDrink[] finishedDrinks = new IFinishedDrink[] { 
+                new Latte(), new Americano(), new Cappuccino(), new Macchiato(), new Mocha()
+            };
+            Dictionary<IFinishedDrink, int> rankList = new Dictionary<IFinishedDrink, int>();
+
+            //Ersätt med LINQ - Nor
+            foreach(IFinishedDrink finishedDrinkType in finishedDrinkTypes)
+            {
+                foreach(Ingredient ingredient in finishedDrinkType.GetIngredients) 
+                {
+                    foreach (Ingredient _ingredient in this.Ingredients)
+                    {
+
+                    }
+                }
+                
+            }
+
+
 
             return new UnknownDrink();
         }
@@ -94,60 +114,38 @@ namespace TheBarista
 
     public class Latte : IFinishedDrink 
     {
-        public static List<Ingredient> Ingredients { get; private set; } 
-            = new List<Ingredient> { 
-                Ingredient.Milk,
-                Ingredient.Espresso
-            };
+        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.Milk };
     }
     public class Espresso : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; }
-            = new List<Ingredient>
-            {
-                Ingredient.Espresso
-            };
+        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso };
     }
 
     public class Cappuccino : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } 
-            = new List<Ingredient> { 
-                Ingredient.Milk, 
-                Ingredient.MilkFoam,
-                Ingredient.Espresso
-            };
+        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Milk, Ingredient.MilkFoam,
+            Ingredient.Espresso };
     }
 
     public class Americano : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } 
-            = new List<Ingredient> { 
-                Ingredient.Water,
-                Ingredient.Espresso
-            };
+        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.Water };
     }
 
     public class Macchiato : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } 
-            = new List<Ingredient> { 
-                Ingredient.MilkFoam,
-                Ingredient.Espresso
-            };
+        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.MilkFoam };
     }
 
     public class Mocha : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } 
-            = new List<Ingredient> { 
-                Ingredient.ChocolateSyrup, 
-                Ingredient.Milk,
-                Ingredient.Espresso
-            };
+        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.ChocolateSyrup, 
+            Ingredient.Milk };
     }
 
-    public class UnknownDrink : IFinishedDrink { }
+    public class UnknownDrink : IFinishedDrink {
+        public Ingredient[] GetIngredients => new Ingredient[] {  };
+    }
 
     public class Beans
     {
