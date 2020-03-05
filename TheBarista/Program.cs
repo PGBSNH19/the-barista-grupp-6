@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TheBarista
 {
@@ -39,10 +40,13 @@ namespace TheBarista
         {
             Console.WriteLine("Welcome to Espresso Group 6!");
             Console.WriteLine();
-            IFinishedDrink espresso = new FluentEspresso()
+            IFinishedDrink drink = new FluentEspresso()
                 .AddBeans(CoffeeSort.Robusta, 4)
                 .AddIngredient(Ingredient.Espresso)
+                .AddIngredient(Ingredient.Milk)
                 .ToBrew();
+
+            Console.WriteLine(drink);
         }
     }
 
@@ -81,35 +85,26 @@ namespace TheBarista
             Dictionary<IFinishedDrink, int> rankList = new Dictionary<IFinishedDrink, int>();
 
             //Ersätt med LINQ - Nor
-
-            foreach (var drink in finishedDrinks)
+            foreach (IFinishedDrink drink in finishedDrinks)
             {
-                if(this.Ingredients == drink.GetIngredients)
+                int points = 0;
+                foreach (Ingredient ingredient in drink.GetIngredients)
                 {
-                    throw new ArgumentNullException();
+                    foreach (Ingredient _ingredient in this.Ingredients)
+                    {
+                        if (_ingredient == ingredient)
+                        {
+                            points++;
+                        }
+                        else
+                        {
+                            points--;
+                        }
+                    }
                 }
+                rankList.Add(drink, points);
             }
-
-            //foreach (IFinishedDrink drink in finishedDrinks)
-            //{
-            //    int points = 0;
-            //    foreach(Ingredient ingredient in drink.GetIngredients) 
-            //    {
-            //        foreach (Ingredient _ingredient in this.Ingredients)
-            //        {
-            //            if (_ingredient == ingredient)
-            //            {
-            //                points++;
-            //            }
-            //            else
-            //            {
-            //                points--;
-            //            }
-            //        }
-            //    }
-            //    rankList.Add(drink, points);
-            //}
-            return new UnknownDrink();
+            return rankList.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
         }
     }
 
