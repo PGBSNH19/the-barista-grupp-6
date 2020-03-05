@@ -3,75 +3,92 @@ using System.Collections.Generic;
 
 namespace TheBarista
 {
+    public interface IFinishedDrink
+    {
+
+    }
 
     public interface IBeverage
     {
         Dictionary<string, int> Ingredients { get; set; }
-        EspressoTypes Type { get; set; }
         Cupsizes Cupsize { get; set; }
         Beans Beans { get; set; }
+
+        IBeverage SetCupsize(Cupsizes size) { return this; }
+        IBeverage AddBeans(CoffeeSorts sort, int amount) { return this; }
+        IBeverage AddWater(int amount) { return this; }
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            FluentEspresso espresso = new FluentEspresso()
+            IBeverage americano = new FluentEspresso()
                 .SetCupsize(Cupsizes.Large)
-                .SetType(EspressoTypes.Americano)
-                .AddWater(20)
-                .AddBeans(5);
+                .AddBeans(CoffeeSorts.Robusta, 8)
+                .AddWater(10)
+                .ToBrew();
+
+            IBeverage espresso = new FluentEspresso()
+                .SetCupsize(Cupsizes.Large)
+                .AddBeans(CoffeeSorts.Robusta, 5)
+                .ToBrew();
 
             Console.ReadLine();
         }
     }
 
-    public class FluentEspresso {
-        private Espresso obj = new Espresso();
+    public class FluentEspresso : IBeverage {
+        private Drink obj = new Drink();
 
-        public FluentEspresso SetType(EspressoTypes type)
-        {
-            obj.Type = type;
-            return this;
-        }
+        public Dictionary<string, int> Ingredients { get; set; }
+        public Cupsizes Cupsize { get; set; }
+        public Beans Beans { get; set; }
 
-        public FluentEspresso SetCupsize(Cupsizes size)
+        public IBeverage SetCupsize(Cupsizes size)
         {
             obj.Cupsize = size;
             return this;
         }
 
-        public FluentEspresso AddBeans(int grams)
+        public IBeverage AddBeans(CoffeeSorts sort, int grams)
         {
-            obj.Beans.AmountInG = grams;
+            obj.Beans = new Beans(sort, grams);
             return this;
         }
 
-        public FluentEspresso AddWater(int amount)
+        //Argument: amount in grams?
+        public IBeverage AddWater(int amount)
         {
             obj.Ingredients.Add("Water", amount);
             return this;
         }
 
-        public FluentEspresso AddMilk(int amount)
+        public IBeverage AddMilk(int amount)
         {
             obj.Ingredients.Add("Milk", amount);
             return this;
         }
 
-        public FluentEspresso AddMilkFoam(int amount)
+        public IBeverage AddMilkFoam(int amount)
         {
             obj.Ingredients.Add("MilkFoam", amount);
             return this;
         }
 
+        //Purpose?
+        public IFinishedDrink ToBrew()
+        {
+            if (this.obj.Beans.AmountInG > 0 && this.obj.Ingredients.Count == 0)
+                return new Espresso();
+            return new UnknownDrink();
+        }
     }
 
-    public enum EspressoTypes
+    public enum CoffeeSorts
     {
-        Espresso,
-        Americano,
-        Latte
+        Robusta,
+        Colombia
     }
 
     public enum Cupsizes
@@ -81,22 +98,15 @@ namespace TheBarista
         Large
     }
 
-    public class Espresso : IBeverage
+    public class Drink : IBeverage
     {
         public Dictionary<string, int> Ingredients { get; set; }
         public Beans Beans { get; set; }
-        public EspressoTypes Type { get; set; }
         public Cupsizes Cupsize { get; set; }
 
-        public Espresso()
+        public Drink()
         {
             this.Ingredients = new Dictionary<string, int>();
-            this.Beans = new Beans();
-        }
-
-        public void SetType(EspressoTypes type)
-        {
-            this.Type = type;
         }
 
         public void SetCupsize(Cupsizes size)
@@ -105,10 +115,11 @@ namespace TheBarista
         }
     }
 
-    public enum CoffeeSorts
+    public class Espresso : IFinishedDrink { }
+
+    public class UnknownDrink : IFinishedDrink
     {
-        Robusta,
-        Colombia
+
     }
 
     public class Beans
@@ -123,8 +134,15 @@ namespace TheBarista
                 _amount = value;
             }
         }
+
+        public Beans(CoffeeSorts sort, int amountInG)
+        {
+            this.sort = sort;
+            this.AmountInG = amountInG;
+        }
     }
 
+    // Not in use
     public class Additive
     {
         private string _name;
