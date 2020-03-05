@@ -82,29 +82,42 @@ namespace TheBarista
                 new Macchiato(), 
                 new Mocha()
             };
-            Dictionary<IFinishedDrink, int> rankList = new Dictionary<IFinishedDrink, int>();
 
             //Ersätt med LINQ - Nor
-            foreach (IFinishedDrink drink in finishedDrinks)
-            {
-                int points = 0;
-                foreach (Ingredient ingredient in drink.GetIngredients)
+            int pointChocolateSyrup = 0;
+            int pointMilkFoam = 0;
+            int pointMilk = 0;
+            int pointWater = 0;
+            int pointEspresso = 0;
+            this.Ingredients.ForEach(i => {
+                if (i == Ingredient.ChocolateSyrup)
                 {
-                    foreach (Ingredient _ingredient in this.Ingredients)
-                    {
-                        if (_ingredient == ingredient)
-                        {
-                            points++;
-                        }
-                        else
-                        {
-                            points--;
-                        }
-                    }
+                    pointChocolateSyrup++;
+                    pointEspresso++;
                 }
-                rankList.Add(drink, points);
-            }
-            return rankList.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+                else if(i == Ingredient.MilkFoam)
+                {
+                    pointMilkFoam++;
+                    pointEspresso++;
+                }
+                else if(i == Ingredient.Milk)
+                {
+                    pointMilk++;
+                    pointEspresso++;
+                }
+                else if(i == Ingredient.Water)
+                {
+                    pointWater++;
+                    pointEspresso++;
+                }
+                else
+                {
+                    pointEspresso++;
+                }
+            });
+
+            return new UnknownDrink();
+            //return rankList.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
         }
     }
 
