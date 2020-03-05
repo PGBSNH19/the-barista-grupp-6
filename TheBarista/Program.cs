@@ -26,10 +26,11 @@ namespace TheBarista
 
     public enum Ingredient
     {
-        Milk,
-        MilkFoam,
         ChocolateSyrup,
-        Water
+        Espresso,
+        MilkFoam,
+        Water,
+        Milk
     }
 
     class Program
@@ -65,8 +66,17 @@ namespace TheBarista
 
         public IFinishedDrink ToBrew()
         {
-            // Fortsätt
+            List<IFinishedDrink> drinkTypes = new List<IFinishedDrink>
+            {
+                new Latte(),
+                new Americano(),
+                new Cappuccino(),
+                new Macchiato(),
+                new Mocha()
+
+            };
             
+
             return new UnknownDrink();
         }
     }
@@ -84,27 +94,57 @@ namespace TheBarista
 
     public class Latte : IFinishedDrink 
     {
-        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.Milk };
+        public static List<Ingredient> Ingredients { get; private set; } 
+            = new List<Ingredient> { 
+                Ingredient.Milk,
+                Ingredient.Espresso
+            };
+    }
+    public class Espresso : IFinishedDrink
+    {
+        public static List<Ingredient> Ingredients { get; private set; }
+            = new List<Ingredient>
+            {
+                Ingredient.Espresso
+            };
     }
 
     public class Cappuccino : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.Milk, Ingredient.MilkFoam };
+        public static List<Ingredient> Ingredients { get; private set; } 
+            = new List<Ingredient> { 
+                Ingredient.Milk, 
+                Ingredient.MilkFoam,
+                Ingredient.Espresso
+            };
     }
 
     public class Americano : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.Water };
+        public static List<Ingredient> Ingredients { get; private set; } 
+            = new List<Ingredient> { 
+                Ingredient.Water,
+                Ingredient.Espresso
+            };
     }
 
     public class Macchiato : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.MilkFoam };
+        public static List<Ingredient> Ingredients { get; private set; } 
+            = new List<Ingredient> { 
+                Ingredient.MilkFoam,
+                Ingredient.Espresso
+            };
     }
 
     public class Mocha : IFinishedDrink
     {
-        public static List<Ingredient> Ingredients { get; private set; } = new List<Ingredient> { Ingredient.ChocolateSyrup, Ingredient.Milk };
+        public static List<Ingredient> Ingredients { get; private set; } 
+            = new List<Ingredient> { 
+                Ingredient.ChocolateSyrup, 
+                Ingredient.Milk,
+                Ingredient.Espresso
+            };
     }
 
     public class UnknownDrink : IFinishedDrink { }
