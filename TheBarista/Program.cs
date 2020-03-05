@@ -44,7 +44,7 @@ namespace TheBarista
                 .AddBeans(CoffeeSort.Robusta, 4)
                 .AddIngredient(Ingredient.Espresso)
                 .AddIngredient(Ingredient.Milk)
-                .AddIngredient(Ingredient.MilkFoam)
+                .AddIngredient(Ingredient.ChocolateSyrup)
                 .ToBrew();
 
             Console.WriteLine(drink);
@@ -80,18 +80,18 @@ namespace TheBarista
             Dictionary<IFinishedDrink, int> rankList = new Dictionary<IFinishedDrink, int>();
 
             //Ersätt med LINQ - Nor
-            foreach (IFinishedDrink drink in finishedDrinks)
-            {
+            finishedDrinks.ToList().ForEach(d => {
                 int points = 0;
-                foreach (Ingredient ingredient in drink.GetIngredients)
+                d.GetIngredients.ForEach(i =>
                 {
-                    if (this.Ingredients.Contains(ingredient))
-                        points++;
-                    else
-                        points--;
-                }
-                rankList.Add(drink, points);
-            }
+                     if (this.Ingredients.Contains(i))
+                         points++;
+                     else
+                         points--;
+                });
+                rankList.Add(d, points);
+            });
+
 
             return rankList.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
         }
