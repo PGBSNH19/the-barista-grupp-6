@@ -5,7 +5,7 @@ namespace TheBarista
 {
     public interface IFinishedDrink
     {
-        Ingredient[] GetIngredients { get; }
+        List<Ingredient> GetIngredients { get; }
     }
 
     public interface IBeverage
@@ -41,8 +41,8 @@ namespace TheBarista
             Console.WriteLine();
             IFinishedDrink espresso = new FluentEspresso()
                 .AddBeans(CoffeeSort.Robusta, 4)
+                .AddIngredient(Ingredient.Espresso)
                 .ToBrew();
-            Console.ReadLine();
         }
     }
 
@@ -50,7 +50,7 @@ namespace TheBarista
     {
         //private Drink obj = new Drink();
 
-        public List<Ingredient> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public Beans Beans { get; set; }
 
         public IBeverage AddBeans(CoffeeSort sort, int grams)
@@ -69,77 +69,107 @@ namespace TheBarista
 
         public IFinishedDrink ToBrew()
         {
-            IFinishedDrink[] finishedDrinks = new IFinishedDrink[] { 
-                new Latte(), new Americano(), new Cappuccino(), new Macchiato(), new Mocha()
+            List<IFinishedDrink> finishedDrinks = new List<IFinishedDrink> 
+            { 
+                new Latte(), 
+                new Espresso(),
+                new Americano(), 
+                new Cappuccino(), 
+                new Macchiato(), 
+                new Mocha()
             };
             Dictionary<IFinishedDrink, int> rankList = new Dictionary<IFinishedDrink, int>();
 
             //Ersätt med LINQ - Nor
-            foreach(IFinishedDrink drink in finishedDrinks)
+
+            foreach (var drink in finishedDrinks)
             {
-                int points = 0;
-                foreach(Ingredient ingredient in drink.GetIngredients) 
+                if(this.Ingredients == drink.GetIngredients)
                 {
-                    foreach (Ingredient _ingredient in this.Ingredients)
-                    {
-                        if (_ingredient == ingredient)
-                        {
-                            points++;
-                        }
-                    }
+                    throw new ArgumentNullException();
                 }
-                rankList.Add(drink, points);
             }
-            return new Latte();
-            //return this;
+
+            //foreach (IFinishedDrink drink in finishedDrinks)
+            //{
+            //    int points = 0;
+            //    foreach(Ingredient ingredient in drink.GetIngredients) 
+            //    {
+            //        foreach (Ingredient _ingredient in this.Ingredients)
+            //        {
+            //            if (_ingredient == ingredient)
+            //            {
+            //                points++;
+            //            }
+            //            else
+            //            {
+            //                points--;
+            //            }
+            //        }
+            //    }
+            //    rankList.Add(drink, points);
+            //}
+            return new UnknownDrink();
         }
     }
 
-    //public class Drink : IBeverage
-    //{
-    //    public List<Ingredient> Ingredients { get; set; }
-    //    public Beans Beans { get; set; }
-        
-    //    public Drink()
-    //    {
-    //        this.Ingredients = new List<Ingredient>();
-    //    }
-    //}
-
     public class Latte : IFinishedDrink 
     {
-        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.Milk };
+        public List<Ingredient> GetIngredients => new List<Ingredient> 
+        { 
+            Ingredient.Espresso, 
+            Ingredient.Milk 
+        };
     }
 
     public class Espresso : IFinishedDrink
     {
-        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso };
+        public List<Ingredient> GetIngredients => new List<Ingredient> 
+        { 
+            Ingredient.Espresso 
+        };
     }
 
     public class Cappuccino : IFinishedDrink
     {
-        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Milk, Ingredient.MilkFoam,
-            Ingredient.Espresso };
+        public List<Ingredient> GetIngredients => new List<Ingredient> 
+        { 
+            Ingredient.Milk, 
+            Ingredient.MilkFoam,
+            Ingredient.Espresso 
+        };
     }
 
     public class Americano : IFinishedDrink
     {
-        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.Water };
+        public List<Ingredient> GetIngredients => new List<Ingredient> 
+        { 
+            Ingredient.Espresso, 
+            Ingredient.Water 
+        };
     }
 
     public class Macchiato : IFinishedDrink
     {
-        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.MilkFoam };
+        public List<Ingredient> GetIngredients => new List<Ingredient> 
+        { 
+            Ingredient.Espresso, 
+            Ingredient.MilkFoam 
+        };
     }
 
     public class Mocha : IFinishedDrink
     {
-        public Ingredient[] GetIngredients => new Ingredient[] { Ingredient.Espresso, Ingredient.ChocolateSyrup, 
-            Ingredient.Milk };
+        public List<Ingredient> GetIngredients => new List<Ingredient> 
+        {
+            Ingredient.Espresso, 
+            Ingredient.ChocolateSyrup, 
+            Ingredient.Milk 
+        };
     }
 
     public class UnknownDrink : IFinishedDrink {
-        public Ingredient[] GetIngredients => new Ingredient[] {  };
+        public List<Ingredient> GetIngredients => new List<Ingredient> { };
     }
 
     public class Beans
