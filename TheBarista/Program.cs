@@ -45,7 +45,7 @@ namespace TheBarista
         {
             Console.WriteLine("Welcome to Espresso Group 6!\n");
 
-            // Make a Latte
+            // Should match a Latte and print out steps
             var latte = new FluentEspresso()
                 .AddBeans(CoffeeSort.Colombia, 5)
                 .ApplyHeat(new Heat(92))
@@ -62,8 +62,6 @@ namespace TheBarista
     {
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public Beans Beans { get; set; }
-        // Added for experiment
-        // True when drink temp is verified
         public Heat Heat { get; set; }
 
         public IBeverage ApplyHeat(Heat heat)
