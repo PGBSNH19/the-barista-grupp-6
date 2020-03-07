@@ -6,6 +6,7 @@ namespace TheBarista
 {
     public interface IFinishedDrink
     {
+        string Name { get; }
         List<Ingredient> GetIngredients { get; }
         string GetName();
     }
@@ -14,9 +15,12 @@ namespace TheBarista
     {
         List<Ingredient> Ingredients { get; set; }
         Beans Beans { get; set; }
+        Heat Heat { get; set; }
 
         IBeverage AddBeans(CoffeeSort sort, int amount);
-        IBeverage AddIngredient(Ingredient ingredient);
+        IBeverage AddIngredient(List<Ingredient> ingredients);
+        IBeverage ValidateTemperature(Func<Heat, bool> query);
+        IBeverage ApplyHeat(Heat heat);
         IFinishedDrink ToBrew();
     }
 
@@ -39,28 +43,18 @@ namespace TheBarista
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Espresso Group 6!");
-            Console.WriteLine();
+            Console.WriteLine("Welcome to Espresso Group 6!\n");
 
-            //Should match Cappucino
-            IFinishedDrink drink = new FluentEspresso()
-                .AddBeans(CoffeeSort.Robusta, 4)
-                .AddIngredient(Ingredient.Espresso)
-                .AddIngredient(Ingredient.Milk)
-                .AddIngredient(Ingredient.MilkFoam)
+            // Make a Latte
+            var latte = new FluentEspresso()
+                .AddBeans(CoffeeSort.Colombia, 5)
+                .ApplyHeat(new Heat(92))
+                .ValidateTemperature(h => h.GetTemperature() < 90 || h.GetTemperature() > 94)
+                .AddIngredient(new List<Ingredient> {
+                    Ingredient.Espresso,
+                    Ingredient.Milk
+                })
                 .ToBrew();
-
-            //Shouldn't match any (Unknown drink)
-            IFinishedDrink drink2 = new FluentEspresso()
-                .AddBeans(CoffeeSort.Robusta, 4)
-                .AddIngredient(Ingredient.MilkFoam)
-                .AddIngredient(Ingredient.Espresso)
-                .AddIngredient(Ingredient.Milk)
-                .AddIngredient(Ingredient.Water)
-                .ToBrew();
-
-            Console.WriteLine(drink.GetName());
-            Console.WriteLine(drink2.GetName());
         }
     }
 
@@ -68,20 +62,41 @@ namespace TheBarista
     {
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public Beans Beans { get; set; }
+        // Added for experiment
+        // True when drink temp is verified
+        public Heat Heat { get; set; }
+
+        public IBeverage ApplyHeat(Heat heat)
+        {
+            this.Heat = heat;
+            Console.WriteLine("Cranking up heat to " + heat.GetTemperature() + " degrees.");
+            return this;
+        }
 
         public IBeverage AddBeans(CoffeeSort sort, int grams)
         {
             Beans = new Beans(sort, grams);
+            Console.WriteLine(grams + " grams of " + sort.ToString() + " beans added.");
             return this;
         }
 
-        public IBeverage AddIngredient(Ingredient ingredient)
+        public IBeverage AddIngredient(List<Ingredient> ingredients)
         {
-            Ingredients.Add(ingredient);
+            ingredients.ForEach(i => {
+                this.Ingredients.Add(i);
+                Console.WriteLine("Ingredient " + i.ToString() + " added.");
+            }
+            );
             return this;
         }
 
-        //function(Func<obj, bool> someName)
+        public IBeverage ValidateTemperature(Func<Heat, bool> query)
+        {
+            if (query.Invoke(Heat))
+                throw new ArgumentException("Heat too high or too low");
+            Console.WriteLine("Drink temperature is valid.");
+            return this;
+        }
 
         public IFinishedDrink ToBrew()
         {
@@ -91,115 +106,137 @@ namespace TheBarista
 
             IFinishedDrink finishedDrink = finishedDrinks.FirstOrDefault(f => Enumerable.SequenceEqual(f.GetIngredients.OrderBy(i => i), this.Ingredients.OrderBy(i => i)));
 
-            return finishedDrink == null ? new UnknownDrink() : finishedDrink;
+            Console.WriteLine("Brew complete.");
+
+            if (finishedDrink == null)
+            {
+                Console.WriteLine("Unknown Drink");
+                return new UnknownDrink();
+            }
+            else
+            {
+                Console.WriteLine(finishedDrink.GetName());
+                return finishedDrink;
+            }
         }
     }
 
-    public class Latte : IFinishedDrink 
+    public class Heat
     {
-        private string _name = "Latte";
+        private double _temperature = 0;
+
+        public Heat(int temperature)
+        {
+            _temperature = temperature;
+        }
+
+        public double GetTemperature() { return _temperature; }
+    }
+
+    public class Latte : IFinishedDrink
+    {
+        public string Name { get; } = "Latte";
 
         public string GetName()
         {
-            return _name;
+            return this.Name;
         }
 
-        public List<Ingredient> GetIngredients => new List<Ingredient> 
-        { 
-            Ingredient.Espresso, 
-            Ingredient.Milk 
+        public List<Ingredient> GetIngredients => new List<Ingredient>
+        {
+            Ingredient.Espresso,
+            Ingredient.Milk
         };
-
     }
 
     public class Espresso : IFinishedDrink
     {
-        private string _name = "Espresso";
+        public string Name { get; } = "Espresso";
 
         public string GetName()
         {
-            return _name;
+            return this.Name;
         }
 
-        public List<Ingredient> GetIngredients => new List<Ingredient> 
-        { 
-            Ingredient.Espresso 
+        public List<Ingredient> GetIngredients => new List<Ingredient>
+        {
+            Ingredient.Espresso
         };
     }
 
     public class Cappuccino : IFinishedDrink
     {
-        private string _name = "Cappuccino";
+        public string Name { get; } = "Cappuccino";
 
         public string GetName()
         {
-            return _name;
+            return this.Name;
         }
 
-        public List<Ingredient> GetIngredients => new List<Ingredient> 
-        { 
-            Ingredient.Milk, 
+        public List<Ingredient> GetIngredients => new List<Ingredient>
+        {
+            Ingredient.Milk,
             Ingredient.MilkFoam,
-            Ingredient.Espresso 
+            Ingredient.Espresso
         };
     }
 
     public class Americano : IFinishedDrink
     {
-        private string _name = "Americano";
+        public string Name { get; } = "Americano";
 
         public string GetName()
         {
-            return _name;
+            return this.Name;
         }
 
-        public List<Ingredient> GetIngredients => new List<Ingredient> 
-        { 
-            Ingredient.Espresso, 
-            Ingredient.Water 
+        public List<Ingredient> GetIngredients => new List<Ingredient>
+        {
+            Ingredient.Espresso,
+            Ingredient.Water
         };
     }
 
     public class Macchiato : IFinishedDrink
     {
-        private string _name = "Macchiato";
+        public string Name { get; } = "Macchiato";
 
         public string GetName()
         {
-            return _name;
+            return this.Name;
         }
 
-        public List<Ingredient> GetIngredients => new List<Ingredient> 
-        { 
-            Ingredient.Espresso, 
-            Ingredient.MilkFoam 
+        public List<Ingredient> GetIngredients => new List<Ingredient>
+        {
+            Ingredient.Espresso,
+            Ingredient.MilkFoam
         };
     }
 
     public class Mocha : IFinishedDrink
     {
-        private string _name = "Mocha";
+        public string Name { get; } = "Mocha";
 
         public string GetName()
         {
-            return _name;
+            return this.Name;
         }
 
-        public List<Ingredient> GetIngredients => new List<Ingredient> 
+        public List<Ingredient> GetIngredients => new List<Ingredient>
         {
-            Ingredient.Espresso, 
-            Ingredient.ChocolateSyrup, 
-            Ingredient.Milk 
+            Ingredient.Espresso,
+            Ingredient.ChocolateSyrup,
+            Ingredient.Milk
         };
     }
 
     public class UnknownDrink : IFinishedDrink
     {
-        private string _name = "Unknown Drink";
+        public string Name { get; } = "Unknown Drink";
 
         public string GetName()
         {
-            return _name;
+            return this.Name;
         }
 
         public List<Ingredient> GetIngredients => new List<Ingredient> { };
@@ -226,6 +263,7 @@ namespace TheBarista
     // Not implemented
     public class Additive
     {
+        // Example: Sugar
         private string _name;
 
         public string Name
@@ -234,5 +272,4 @@ namespace TheBarista
             set => _name = value;
         }
     }
-
 }
