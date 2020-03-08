@@ -46,13 +46,20 @@ namespace TheBarista
         public IBeverage ToBrew()
         {
             IBeverage[] finishedDrinks = new IBeverage[] {
-                new Latte(), new Americano(), new Cappuccino(), new Macchiato(), new Mocha(), new Espresso()
+                new Latte(), 
+                new Americano(), 
+                new Cappuccino(), 
+                new Macchiato(), 
+                new Mocha(), 
+                new Espresso()
             };
 
-            IBeverage finishedDrink = finishedDrinks.FirstOrDefault(f => Enumerable.SequenceEqual(f.GetIngredients.OrderBy(i => i), this.Ingredients.OrderBy(i => i)));
+            IBeverage finishedDrink = 
+                finishedDrinks.FirstOrDefault(f =>
+                    Enumerable.SequenceEqual(f.GetIngredients.OrderBy(i => i), this.Ingredients.OrderBy(i => i))
+                );
 
-            if (finishedDrink == null)
-                finishedDrink = new UnknownDrink();
+            finishedDrink = (finishedDrink == null) ? new UnknownDrink() : finishedDrink;
 
             Console.WriteLine("Brew complete.");
             Console.WriteLine(finishedDrink.GetName());
