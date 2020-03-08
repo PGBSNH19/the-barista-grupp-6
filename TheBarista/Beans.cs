@@ -10,8 +10,21 @@ namespace TheBarista
         private int _amountInGrams;
         public int AmountInGrams
         {
-            get => _amountInGrams;
-            set => _amountInGrams = value;
+            get
+            {
+                return _amountInGrams;
+            }
+            set
+            {
+                if (value < 1)
+                {
+                    throw new ArgumentException("Amount of grams cannot be 0 or lower.");
+                }
+                else
+                {
+                    _amountInGrams = value;
+                }
+            }
         }
 
         public Beans(CoffeeSort sort, int amountInGrams)
