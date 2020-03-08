@@ -26,6 +26,7 @@ namespace TheBarista
 
     // Note @pierre-nygard
     // Not implemented
+    [Obsolete("This class has not been implemented yet.", true)]
     public class Additive
     {
         // Example: Sugar
