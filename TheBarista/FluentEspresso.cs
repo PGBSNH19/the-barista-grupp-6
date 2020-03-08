@@ -51,18 +51,13 @@ namespace TheBarista
 
             IBeverage finishedDrink = finishedDrinks.FirstOrDefault(f => Enumerable.SequenceEqual(f.GetIngredients.OrderBy(i => i), this.Ingredients.OrderBy(i => i)));
 
-            Console.WriteLine("Brew complete.");
-
             if (finishedDrink == null)
-            {
-                Console.WriteLine("Unknown Drink");
-                return new UnknownDrink();
-            }
-            else
-            {
-                Console.WriteLine(finishedDrink.GetName());
-                return finishedDrink;
-            }
+                finishedDrink = new UnknownDrink();
+
+            Console.WriteLine("Brew complete.");
+            Console.WriteLine(finishedDrink.GetName());
+
+            return finishedDrink;
         }
     }
 }
