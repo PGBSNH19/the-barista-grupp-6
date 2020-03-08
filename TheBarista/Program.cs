@@ -15,12 +15,12 @@ namespace TheBarista
     {
         List<Ingredient> Ingredients { get; set; }
         Beans Beans { get; set; }
-        Heat Heat { get; set; }
+        double Temperature { get; set; }
 
         IBeverage AddBeans(CoffeeSort sort, int amount);
         IBeverage AddIngredient(List<Ingredient> ingredients);
-        IBeverage ValidateTemperature(Func<Heat, bool> query);
-        IBeverage ApplyHeat(Heat heat);
+        IBeverage ValidateTemperature(Func<double, bool> query);
+        IBeverage ApplyHeat(double temperature);
         IFinishedDrink ToBrew();
     }
 
@@ -48,8 +48,8 @@ namespace TheBarista
             // Should match a Latte and print out steps
             var latte = new FluentEspresso()
                 .AddBeans(CoffeeSort.Colombia, 5)
-                .ApplyHeat(new Heat(92))
-                .ValidateTemperature(h => h.GetTemperature() < 90 || h.GetTemperature() > 94)
+                .ApplyHeat(92)
+                .ValidateTemperature(h => h < 90 || h > 94)
                 .AddIngredient(new List<Ingredient> {
                     Ingredient.Espresso,
                     Ingredient.Milk
@@ -62,12 +62,12 @@ namespace TheBarista
     {
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public Beans Beans { get; set; }
-        public Heat Heat { get; set; }
+        public double Temperature { get; set; }
 
-        public IBeverage ApplyHeat(Heat heat)
+        public IBeverage ApplyHeat(double temperature)
         {
-            this.Heat = heat;
-            Console.WriteLine("Cranking up heat to " + heat.GetTemperature() + " degrees.");
+            this.Temperature = temperature;
+            Console.WriteLine("Cranking up heat to " + temperature + " degrees.");
             return this;
         }
 
@@ -88,9 +88,9 @@ namespace TheBarista
             return this;
         }
 
-        public IBeverage ValidateTemperature(Func<Heat, bool> query)
+        public IBeverage ValidateTemperature(Func<double, bool> query)
         {
-            if (query.Invoke(Heat))
+            if (query.Invoke(Temperature))
                 throw new ArgumentException("Heat too high or too low");
             Console.WriteLine("Drink temperature is valid.");
             return this;
@@ -117,18 +117,6 @@ namespace TheBarista
                 return finishedDrink;
             }
         }
-    }
-
-    public class Heat
-    {
-        private double _temperature = 0;
-
-        public Heat(int temperature)
-        {
-            _temperature = temperature;
-        }
-
-        public double GetTemperature() { return _temperature; }
     }
 
     public class Latte : IFinishedDrink

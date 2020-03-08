@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheBarista", "TheBarista\TheBarista.csproj", "{3647F1E9-D933-4676-9E23-D7C5CB8B6321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBarista", "TheBarista\TheBarista.csproj", "{3647F1E9-D933-4676-9E23-D7C5CB8B6321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentInterfaceUnitTest", "FluentInterfaceUnitTest\FluentInterfaceUnitTest.csproj", "{54198DCE-7B4E-4E20-9143-922D62477B8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{3647F1E9-D933-4676-9E23-D7C5CB8B6321}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3647F1E9-D933-4676-9E23-D7C5CB8B6321}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3647F1E9-D933-4676-9E23-D7C5CB8B6321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54198DCE-7B4E-4E20-9143-922D62477B8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54198DCE-7B4E-4E20-9143-922D62477B8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54198DCE-7B4E-4E20-9143-922D62477B8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54198DCE-7B4E-4E20-9143-922D62477B8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
