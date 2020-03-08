@@ -11,7 +11,7 @@ namespace FluentInterfaceUnitTest
         [TestMethod]
         public void TestMakingLatte()
         {
-            IFinishedDrink latte = new FluentEspresso()
+            IBeverage latte = new FluentEspresso()
                 .AddBeans(CoffeeSort.Colombia, 5)
                 .ApplyHeat(92)
                 .ValidateTemperature(h => h < 90 || h > 94)
@@ -28,7 +28,7 @@ namespace FluentInterfaceUnitTest
         public void TestApplyingHeat()
         {
             double temperature = 92;
-            IBeverage beverage = new FluentEspresso()
+            ICoffeeMaker beverage = new FluentEspresso()
                 .ApplyHeat(temperature);
 
             Assert.AreEqual(temperature, beverage.Temperature);
