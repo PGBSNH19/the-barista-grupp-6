@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TheBarista
 {
-    public class FluentEspresso : ICoffeeMaker
+    public class FluentCoffeeMaker : ICoffeeMaker
     {
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public Beans Beans { get; set; }

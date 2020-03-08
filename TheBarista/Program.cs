@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TheBarista
 {
-
     class Program
     {
         static void Main(string[] args)
@@ -12,7 +10,7 @@ namespace TheBarista
             Console.WriteLine("Welcome to Espresso Group 6!\n");
 
             // Should match a Latte and print out steps
-            IBeverage latte = new FluentEspresso()
+            IBeverage latte = new FluentCoffeeMaker()
                 .AddBeans(CoffeeSort.Colombia, 5)
                 .ApplyHeat(92)
                 .ValidateTemperature(h => h < 90 || h > 94)
